@@ -1,0 +1,207 @@
+ 1. find all candidate having java technology
+
++----+------------+-------------+-----------+------------------------------+------------+--------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+| Id | First_Name | Middle_Name | Last_Name | Email_Id                     | Hired_City | Degree | Hired_Date | Mobile_Number | Permanent_Pincode | Hired_Lab | Attitude | Communication_Remark | Knowledge_Remark | Aggregate_Remark | Status   | Creator_Stamp       | Creator_User | Tech_Name |
++----+------------+-------------+-----------+------------------------------+------------+--------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+|  1 | Tushar     | Shankar     | Jadhav    | tushar.jadhav.work@gmail.com | Mumbai     | BE-IT  | 2024-03-16 | 8125467896    | 400084            | Mumbai    | Positive | Good                 | Excellent        | Good             | Accepted | 2024-05-20 11:37:50 |            1 | Java      |
+|  2 | Anjali     | Ananda      | Patil     | anjalipatil@gmail.com        | Mumbai     | BE-IT  | 2024-04-02 | 8108654596    | 623458            | Mumbai    | Positive | Good                 | Good             | Good             | Accepted | 2024-05-20 11:37:50 |            2 | Java      |
+|  4 | Vedant     | abcd        | Gujarati  | vedantgujarati@gmail.com     | Mumbai     | BE-CS  | 2023-06-14 | 7098325648    | 623462            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-05-20 11:37:50 |            4 | Java      |
+|  5 | Vaibhav    | abcd        | Kumbhar   | vaibhav.kumbhar@gmail.com    | Mumbai     | BE-CS  | 2024-01-01 | 7078451296    | 400065            | Mumbai    | Average  | Good                 | Good             | Good             | Accepted | 2024-05-20 11:37:50 |            5 | Java      |
+|  9 | Sakshi     | Pravin      | Chavan    | sakshichavan@gmail.com       | Mumbai     | BE-IT  | 2024-05-12 | 9685741256    | 785412            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-05-20 11:37:50 |            9 | Java      |
++----+------------+-------------+-----------+------------------------------+------------+--------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+2. find all mentors and ideations have java technology 
+
+mysql> SELECT mentor.Name,mentor.Mentor_Type,tech_stack.Tech_Name FROM mentor LEFT JOIN tech_stack ON mentor.Creator_User = tech_stack.Creator_User WHERE tech_stack.Tech_Name = "Java";
++-----------+--------------------+-----------+
+| Name      | Mentor_Type        | Tech_Name |
++-----------+--------------------+-----------+
+| Sunil     | Lead/Practice head | Java      |
+| Venkat    | Support Mentor     | Java      |
+| Aishwarya | Buddy Mentor       | Java      |
+| Gunjan    | Lead/Practice head | Java      |
+| Roshni    | Support Mentor     | Java      |
++-----------+--------------------+-----------+
+5 rows in set (0.00 sec)
+
+3. find name of candidate which did not assign technology
+
+mysql> SELECT hired_candidate.First_Name,hired_candidate.Last_Name,tech_stack.Tech_Name FROM hired_candidate LEFT JOIN tech_stack ON hired_candidate.Creator_User = tech_stack.Creator_User WHERE tech_stack.Tech_Name = " ";
+Empty set (0.00 sec)
+
+4. find name of candidate which is not submit documents 
+
+mysql> SELECT hired_candidate.First_Name,hired_candidate.Last_Name,candidate_documents.Status FROM hired_candidate LEFT JOIN candidate_documents ON hired_candidate.Creator_User = candidate_documents.Creator_User WHERE candidate_documents.Status = "Pending";
++------------+-----------+---------+
+| First_Name | Last_Name | Status  |
++------------+-----------+---------+
+| Vedant     | Gujarati  | Pending |
++------------+-----------+---------+
+1 row in set (0.00 sec)
+
+5. find name of candidate which is not submit bank details
+
+mysql> SELECT hired_candidate.First_Name,hired_candidate.Last_Name,candidate_bank_details.Candidate_Id FROM hired_candidate LEFT JOIN candidate_bank_details ON hired_candidate.Creator_User = candidate_bank_details.Creator_User WHERE candidate_bank_details.Account_Number = " " And candidate_bank_details.Ifsc_Code = " ";
+Empty set (0.00 sec)
+
+6. find name of candidates which is joined in dec month
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name FROM fellowship_candidate WHERE MONTH(fellowship_candidate.Hired_Date) = 12;
++------------+-------------+-----------+
+| First_Name | Middle_Name | Last_Name |
++------------+-------------+-----------+
+| Pranali    | abcd        | Deware    |
++------------+-------------+-----------+
+1 row in set (0.00 sec)
+
+7. find name of candidates which is end of couse in feb
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name FROM fellowship_candidate WHERE MONTH(DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH))=2;
+Empty set (0.00 sec)
+
+8. find name of candidates which is ending date accounding to joining date if joining date is 22-02-2019
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name,fellowship_candidate.Hired_Date FROM fellowship_candidate WHERE MONTH(DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH)) = '2019-02-22';
+Empty set, 1 warning (0.00 sec)
+
+9. find all candidates which is passed out in 2019 year
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name,Candidate_Qualification.Passing_Year FROM fellowship_candidate LEFT JOIN candidate_qualification ON fellowship_candidate.Creator_User = candidate_qualification.Creator_User WHERE candidate_qualification.Passing_Year = 2019;
++------------+-------------+------------+--------------+
+| First_Name | Middle_Name | Last_Name  | Passing_Year |
++------------+-------------+------------+--------------+
+| Sanket     | Sanjay      | Kalambaste |         2019 |
++------------+-------------+------------+--------------+
+1 row in set (0.00 sec)
+
+10. which technology assign to which candidates which is having MCA background
+
+mysql> SELECT hired_candidate.First_Name,hired_candidate.Middle_Name,hired_candidate.Last_Name,hired_candidate.Degree,tech_stack.Tech_Name FROM hired_candidate LEFT JOIN tech_stack ON hired_candidate.Creator_User = tech_stack.Creator_User WHERE hired_candidate.Degree = "MCA";
++------------+-------------+-----------+--------+-----------+
+| First_Name | Middle_Name | Last_Name | Degree | Tech_Name |
++------------+-------------+-----------+--------+-----------+
+| Pranali    | abcd        | Deware    | MCA    | SQL       |
++------------+-------------+-----------+--------+-----------+
+1 row in set (0.00 sec)
+
+11. how many candiates which is having last month
+
+
+mysql> SELECT COUNT(fellowship_candidate.First_Name) AS Last_Month_Count FROM fellowship_candidate WHERE DATE_ADD(fellowship_candidate.Hired_Date, INTERVAL 3 MONTH) BETWEEN '2024-05-01' AND '2024-06-30';
++------------------+
+| Last_Month_Count |
++------------------+
+|                2 |
++------------------+
+1 row in set (0.00 sec)
+
+12. how many week candidate completed in the bridgelabz since joining date candidate id is 2
+
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,fellowship_candidate.Hired_Date,FLOOR(DATEDIFF(CURDATE(),fellowship_candidate.Hired_Date)/7) AS Completed_Weeks FROM fellowship_candidate WHERE fellowship_candidate.Id = 1002;
++------------+-----------+------------+-----------------+
+| First_Name | Last_Name | Hired_Date | Completed_Weeks |
++------------+-----------+------------+-----------------+
+| Anjali     | Patil     | 2024-04-02 |               7 |
++------------+-----------+------------+-----------------+
+1 row in set (0.00 sec)
+
+13. find joining date of candidate if candidate id is 4
+
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,fellowship_candidate.Hired_Date FROM fellowship_candidate WHERE fellowship_candidate.Id = 1004;
++------------+-----------+------------+
+| First_Name | Last_Name | Hired_Date |
++------------+-----------+------------+
+| Vedant     | Gujarati  | 2023-06-14 |
++------------+-----------+------------+
+1 row in set (0.00 sec)
+
+14. how many week remaining of candidate in the bridglabz from today if candidate id is 5
+
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,FLOOR(DATEDIFF(CURDATE(),DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH)/7)) AS Remaining_Weeks FROM fellowship_candidate WHERE fellowship_candidate.Id = 1005;
++------------+-----------+-----------------+
+| First_Name | Last_Name | Remaining_Weeks |
++------------+-----------+-----------------+
+| Vaibhav    | Kumbhar   |            NULL |
++------------+-----------+-----------------+
+1 row in set, 1 warning (0.00 sec)
+
+15. how many days remaining of candidate in the bridgelabz from today if candidate is is 6
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,DATEDIFF(DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH),CURDATE()) AS Remaining_Days FROM fellowship_candidate WHERE fellowship_candidate.Id = 1006;
++------------+-----------+----------------+
+| First_Name | Last_Name | Remaining_Days |
++------------+-----------+----------------+
+| Sushmita   | Pawar     |             29 |
++------------+-----------+----------------+
+1 row in set (0.00 sec)
+
+16. find candidates which is deployed
+
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name FROM fellowship_candidate JOIN company_requirement ON fellowship_candidate.Creator_User = company_requirement.Creator_User JOIN candidate_stack_assignment ON fellowship_candidate.Creator_User = candidate_stack_assignment.Creator_User WHERE candidate_stack_assignment.Complete_Date > company_requirement.Requested_Month;
++------------+-----------+
+| First_Name | Last_Name |
++------------+-----------+
+| Anjali     | Patil     |
+| Vedant     | Gujarati  |
+| Vaibhav    | Kumbhar   |
+| Sakshi     | Chavan    |
+| Pranali    | Deware    |
++------------+-----------+
+5 rows in set (0.00 sec)
+
+17. find name and other details and name of company which is assign to candidate
+
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,company.* FROM fellowship_candidate JOIN company ON fellowship_candidate.Creator_User = company.Creator_User;
++------------+------------+-----+---------------------------------------------+--------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+| First_Name | Last_Name  | Id  | Name                                        | Address                                                            | Location    | Status | Creator_Stamp       | Creator_User |
++------------+------------+-----+---------------------------------------------+--------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+| Tushar     | Jadhav     | 101 | QualityKiosk Technologies                   | C Wing,Rupa Solitaire,Sector-1,Millennium Business Park            | Navi Mumbai | Active | 2024-05-21 11:59:54 |            1 |
+| Anjali     | Patil      | 102 | Accenture                                   | 1st, 2nd, 3rd, & 4th Office Level, Building No. 02 Mindspace       | Navi Mumbai | Active | 2024-05-21 11:59:54 |            2 |
+| Sanket     | Kalambaste | 103 | ContractPod Solutions Pvt. Ltd              | 2nd Floor, Raheja Platinum, WeWork India, Road, Sag Baug, Marol    | Mumbai      | Active | 2024-05-21 11:59:54 |            3 |
+| Vedant     | Gujarati   | 104 | Amazon Web Services India Private Limited   | 1th Floor, Godrej One, Pirojshanagar, Vikhroli                     | Mumbai      | Active | 2024-05-21 11:59:54 |            4 |
+| Vaibhav    | Kumbhar    | 105 | Amdocs DVCI                                 | Tower 12, Magarpatta Inner Circle, Cybercity, Magarpatta, Hadapsar | Pune        | Active | 2024-05-21 11:59:54 |            5 |
+| Sushmita   | Pawar      | 106 | Jet2 Travel Technologies Pvt. Ltd.          | 16th floor,Jet2 Travel Technologies Pvt. Ltd,Viman Nagar           | Pune        | Active | 2024-05-21 11:59:54 |            7 |
+| Sakshi     | Chavan     | 107 | Capgemini Technology Services India Limited | M6, Capgemini Knowledge Park,Thane - Belapur Rd,Airoli             | Navi Mumbai | Active | 2024-05-21 11:59:54 |            9 |
+| Pranali    | Deware     | 108 | Zeus Learning                               | Tower B,Peninsula Business Park,Ganapatrao Kadam Marg,Lower Parel  | Mumbai      | Active | 2024-05-21 11:59:54 |           10 |
++------------+------------+-----+---------------------------------------------+--------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+8 rows in set (0.00 sec)
+
+18. find all condidate and mentors which is related to lab= banglore/mumbai/pune
+
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,mentor.Name,lab.Location FROM fellowship_candidate JOIN mentor ON fellowship_candidate.Creator_User = mentor.Creator_User JOIN lab ON fellowship_candidate.Creator_User = lab.Creator_User WHERE lab.Location IN ("Mumbai","Pune","Bengalore");
++------------+------------+-----------+-----------+
+| First_Name | Last_Name  | Name      | Location  |
++------------+------------+-----------+-----------+
+| Tushar     | Jadhav     | Sunil     | Mumbai    |
+| Anjali     | Patil      | Venkat    | Mumbai    |
+| Sanket     | Kalambaste | Pooja     | Pune      |
+| Vedant     | Gujarati   | Aishwarya | Pune      |
+| Vaibhav    | Kumbhar    | Gunjan    | Bengalore |
+| Sushmita   | Pawar      | Nagendra  | Bengalore |
+| Sakshi     | Chavan     | Roshni    | Mumbai    |
+| Pranali    | Deware     | Sudhakar  | Pune      |
++------------+------------+-----------+-----------+
+8 rows in set (0.00 sec)
+
+19. find buddy mentors and ideation mentor and which technology assign to perticular candidate if candidate id is 6
+
+mysql> SELECT fellowship_candidate.First_Name,mentor.Name,mentor.Mentor_Type,tech_stack.Tech_Name FROM fellowship_candidate JOIN mentor ON fellowship_candidate.Creator_User = mentor.Creator_User JOIN tech_stack ON fellowship_candidate.Creator_User = tech_stack.Creator_User WHERE fellowship_candidate.Id = 1006;
++------------+----------+----------------+-----------+
+| First_Name | Name     | Mentor_Type    | Tech_Name |
++------------+----------+----------------+-----------+
+| Sushmita   | Nagendra | Support Mentor | Python    |
++------------+----------+----------------+-----------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
